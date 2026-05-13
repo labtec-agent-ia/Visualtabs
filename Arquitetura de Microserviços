@@ -1,0 +1,57 @@
+# docker-compose.yml
+version: '3'
+services:
+  api-gateway:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+  
+  auth-service:
+    build: ./auth
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+  
+  campaign-service:
+    build: ./campaigns
+    environment:
+      - DB_HOST=db
+      - ANALYTICS_HOST=analytics
+    depends_on:
+      - db
+      - analytics
+  
+  analytics-service:
+    build: ./analytics
+    environment:
+      - DB_HOST=clickhouse
+    depends_on:
+      - clickhouse
+  
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+  
+  clickhouse:
+    image: yandex/clickhouse-server:latest
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    ports:
+      - "8123:8123"
+  
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - redis_data:/data
+  
+volumes:
+  postgres_data:
+  clickhouse_data:
+  redis_data:
