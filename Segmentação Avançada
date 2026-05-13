@@ -1,0 +1,16 @@
+class AdvancedTargeting:
+    def __init__(self):
+        self.segments = []
+    
+    def add_location_segment(self, country=None, city=None, radius=10):
+        """Segmentação por localização"""
+        return {"type": "location", "country": country, "city": city, "radius": radius}
+    
+    def add_behavioral_segment(self, interests=None, activities=None, devices=None):
+        """Segmentação comportamental"""
+        return {"type": "behavioral", "interests": interests or [], 
+                "activities": activities or [], "devices": devices or []}
+    
+    def add_custom_segment(self, custom_data=None, rules=None):
+        """Segmentação personalizada via regras"""
+        return {"type": "custom", "data": custom_data, "rules": rules}
