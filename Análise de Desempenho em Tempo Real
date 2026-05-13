@@ -1,0 +1,29 @@
+class RealTimeAnalytics:
+    def __init__(self):
+        self.metrics = {
+            "impressions": 0,
+            "clicks": 0,
+            "conversions": 0,
+            "ctr": 0.0,
+            "cpm": 0.0,
+            "cpc": 0.0,
+            "cpa": 0.0
+        }
+    
+    def update_metrics(self, data):
+        """Atualiza métricas em tempo real"""
+        for metric, value in data.items():
+            if metric in self.metrics:
+                self.metrics[metric] += value
+        self._calculate_derived_metrics()
+    
+    def _calculate_derived_metrics(self):
+        """Calcula métricas derivadas"""
+        if self.metrics["impressions"] > 0:
+            self.metrics["ctr"] = (self.metrics["clicks"] / self.metrics["impressions"]) * 100
+        if self.metrics["impressions"] > 0:
+            self.metrics["cpm"] = (self.metrics["cost"] / self.metrics["impressions"]) * 1000
+        if self.metrics["clicks"] > 0:
+            self.metrics["cpc"] = self.metrics["cost"] / self.metrics["clicks"]
+        if self.metrics["conversions"] > 0:
+            self.metrics["cpa"] = self.metrics["cost"] / self.metrics["conversions"]
