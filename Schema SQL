@@ -1,0 +1,35 @@
+-- database/schema.sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Tabela de anunciantes
+CREATE TABLE advertisers (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW(),
+    is_active BOOLEAN DEFAULT TRUE
+);
+
+-- Índices para melhor performance
+CREATE INDEX idx_advertisers_email ON advertisers(email);
+CREATE INDEX idx_advertisers_created_at ON advertisers(created_at);
+
+-- Tabela de campanhas
+CREATE TABLE campaigns (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    advertiser_id UUID REFERENCES advertisers(id),
+    name VARCHAR(255) NOT NULL,
+    budget DECIMAL(12,2) NOT NULL,
+    daily_budget DECIMAL(12,2),
+    start_date DATE NOT NULL,
+    end_date DATE,
+    status VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Índices para campanhas
+CREATE INDEX idx_campaigns_advertiser_id ON campaigns(advertiser_id);
+CREATE INDEX idx_campaigns_status ON campaigns(status);
