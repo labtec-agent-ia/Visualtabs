@@ -1,0 +1,26 @@
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
+
+def analyze_campaign_performance(data):
+    # Carregar dados
+    df = pd.read_csv(data)
+    
+    # Feature engineering
+    features = ['age', 'gender', 'device', 'location']
+    X = df[features]
+    y = df['conversion']
+    
+    # Normalização
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
+    
+    # Treinar modelo
+    model = RandomForestClassifier(n_estimators=100)
+    model.fit(X_scaled, y)
+    
+    # Prever
+    predictions = model.predict_proba(X_scaled)
+    df['prediction'] = predictions[:, 1]
+    
+    return df
