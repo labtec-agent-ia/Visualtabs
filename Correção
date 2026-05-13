@@ -1,0 +1,12 @@
+// src/components/Header.jsx
+import React from 'react';
+import './Header.css';
+
+const Header = ({ user }) => (
+  <header className="header">
+    <h1>VisualTabs</h1>
+    {user && <span>{user.name}</span>}
+  </header>
+);
+
+export default Header;
